@@ -1,0 +1,129 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymerfire/polymerfire.html">
+
+<!--
+`firebase-storage-upload`
+Upload files to firebase storage bucket
+
+@demo demo/index.html
+-->
+
+<dom-module id="firebase-storage-upload">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <input
+        id="selectFile"
+        type="file"
+        on-change="_handleFile"
+        accept="[[accept]]"
+        >
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'firebase-storage-upload',
+
+      properties: {
+        /**
+         * Firebase app to use.
+        */
+        app: {
+            type: Object,
+            value: {}
+        },
+        /**
+         * Specifies the types of files that the server accepts.
+         * Syntax: file_extension|audio/*|video/*|image/*|media_type
+         */
+        accept: {
+          type: String,
+          value: ''
+        },
+        /**
+         * Specifies the maximum file size in kB allowed to upload. Default is
+         * unlimited.
+         */
+        maxFileSize: {
+          type: Number,
+          value: Infinity
+        },
+        /**
+         * path on storage bucket with trailing slash
+         * unlimited.
+         */
+        path: {
+          type: String,
+          value: ''
+        },
+        /**
+         * Reference to storage bucket
+         */
+        storageReference: {
+          type: Object,
+          value: {}
+        },
+        /**
+         * Upload task from firebases put()
+         */
+        uploadTask: {
+            type: Object
+        },
+        /**
+         * Current progress in %
+         * 0 - 100
+         */
+        progress: {
+            type: Number,
+            value: 0,
+            reflectToAttribute: true
+        }
+
+    },
+
+    attached: function() {
+        this.set('storageReference', this.app.storage());
+    },
+
+    _handleFile: function() {
+        var self = this;
+        var file = this.$$('input[type=file]').files[0];
+        var maxFileSizeInKiloBytes = this.maxFileSize * 1024;
+        if(file.size > maxFileSizeInKiloBytes) return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
+        if(!this.path) return alert("Upload path not set");
+        this._uploadFile(this.path, file);
+    },
+
+    _uploadFile: function(path, file) {
+        var self = this;
+        self.set('progress', 0);
+        this.set('uploadTask', this.storageReference.ref().child(path + file.name).put(file));
+        this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            function(snapshot) {
+                self.set('progress', (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log('Upload is ' + self.progress + '% done');
+                switch (snapshot.state) {
+                  case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    self.fire('paused', snapshot);
+                    break;
+                  case firebase.storage.TaskState.RUNNING: // or 'running'
+                    self.fire('running', snapshot);
+                    break;
+                }
+            }, function(error) {
+                self.fire('error', error);
+            }, function(snapshot) {
+                self.fire('succes', snapshot);
+            }
+        );
+    }
+
+    });
+  </script>
+</dom-module>
