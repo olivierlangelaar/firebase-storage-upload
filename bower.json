@@ -1,6 +1,6 @@
 {
   "name": "firebase-storage-upload",
-  "description": "Upload files to firebase storage bucket",
+  "description": "Polymer element to upload files to a firebase storage bucket ",
   "main": "firebase-storage-upload.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0"
