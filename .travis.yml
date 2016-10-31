@@ -1,11 +1,25 @@
 language: node_js
-node_js:
-    - "4.0"
+node_js: stable
+dist: trusty
+sudo: required
+addons:
+  firefox: latest
+  sauce_connect:
+    username: OlivierLangelaar
+    access_key: b136e619-099d-4d7c-af4c-a5e0270a64e3
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+before_script:
+- npm install -g bower polylint web-component-tester
+- bower install
+- polylint
 script:
-    - echo "Deploying!"
-install:
-    - npm install -g firebase-tools polymer-cli bower
-after_success:
-    - bower install
-    - polymer lint
-    - polymer test
+- xvfb-run wct --skip-plugin sauce
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --skip-plugin local -s 'default'; fi
+env:
+  global:
+  - secure: puz9455u/oeomvomexIBIAsHONh5Mz5m0f1We393K7JniDQKR/+RbyAquSDR6J9OPg8DTGlMmQYwYGC4KvuhWd6bSS62Ff/Ne0yldUePIhwUjRSeiRVnjp3UkS30cW+GR2ofYo7GbvvwML5PfAnMqOZH9s05WqfH6o+wfsrrxQdj+N/bwj+DBKNG0WabB2qsRyfeMVXSwGB6wExhvIkqGFvUiwSDYPEYcBOrgGAz9Wb5dxqsXRjIPZZU3ZNQNWAD52JBCX46xK7NJKiIIiVpbadccmh74F8ouccn9F8zsBFjk+6n7Fgmc1IMBcjlMx6NfxdOXWm4hozjGqT/GeQWbbWFSGIhWd+r/JZy/SbRSGn6YLwhpx5bxcLWY9mkrne9j8YQ30+njN8dwbLsAgbT5ldV152CDJ5R9732APcSe+AE5R7r8pacZiRISQCw/bM5RoC0FSTUBznA2N1Aowm4wgvXdlsr/NDFzTfsrm2D96NsNLcdyVFCS++hsERF9U1Zb2E+SOPGZOONeLiD9RVqB+hSN+PMWq9DrNozdeAKitw1KppcFKlsvKHy24MXQ+EzVLGUQQXSBAyCoJj4mBcxo3Bgu+M6aofTXfnHSfhttYSTRqljOhV2l51/VPb2zlTIMv/utoQNnoLX3e76+4rRLAaVZB3tB9fxY1oY4K0pDJQ=
+  - secure: IkWiSc5b671zAjw0MX1b1pKSV9WHdc3+dvnuUuy0EKKc/LG+a3jVzwWlZgge03aj0XuAopHGlvkeP2LQplsJzlrzqex9ISRUwfowZ4WHfOBMAdl0QKXY2Stbo9BXkS7B4VZcsStOsY1bsGpDH6X9RTjTUBK1o2NnHuxWLFhOV6n19xUk95BJF0UTdHJ8E8W0/j6PQa5bQsazGvMJnjSgRNq6fDMyy1Kl1G/RP/jrC3D/L2DKZ+mZ6lhMVSg17xcCysRQZ+o+blwJFsOTSaaysRCC18pvWpGHzTstvBPlzkHIj6CBNYZMHbvUDY3SJaoVPvDLxsAjsaj4+CVprBjh16mdKupUgzzE+Zq8DXATxBcGm+ifRRqjANVfMZ97MTp0hYaHZmoO4wfuJe27LlRv2iRU4ERr4M4ZTaMh+LhjgCl9+jn/oC6Nng0ZqCt4HxvYHM37MmzlZls+30tblb93ft4oqF13MhmMTnVrGNqCvs/mWwFvisHdIlxyO5zTapRv1ITcpfIHD0X3EoijAhjtRA7vrofkl2Mwj0vZ7CK59lBiaN3NGYmcK6myqwPivX5pKHimtTA5ents1WjHqsqrB7zMrYUgW3FnmqYlU3ddFxF5vhX8JhYJ8XWaaSVUhEFsVL44M8EimP8ep4NYAZFldHwQQZdk8UA/VNt2xqI9t8o=
