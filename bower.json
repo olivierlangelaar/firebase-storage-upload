@@ -2,6 +2,18 @@
   "name": "firebase-storage-upload",
   "description": "Polymer element to upload files to a firebase storage bucket ",
   "main": "firebase-storage-upload.html",
+  "authors": [
+    "Olivier Langelaar <olivier@crowdaboutnow.com>"
+  ],
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "firebase",
+    "upload",
+    "firebase-upload",
+    "file upload"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0"
   },
@@ -10,6 +22,7 @@
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "polymerfire": "^0.10.2"
+    "polymerfire": "^0.10.2",
+    "paper-progress": "PolymerElements/paper-progress#^1.0.11"
   }
 }

@@ -17,7 +17,6 @@ Upload files to firebase storage bucket
     </style>
 
     <input
-        id="selectFile"
         type="file"
         on-change="_handleFile"
         accept="[[accept]]"
@@ -35,7 +34,7 @@ Upload files to firebase storage bucket
          * Firebase app to use.
          * dont forget to set your storagebucket
         */
-        app: {
+        ref: {
             type: Object,
             value: {}
         },
@@ -83,32 +82,36 @@ Upload files to firebase storage bucket
         progress: {
             type: Number,
             value: 0,
-            reflectToAttribute: true
+            reflectToAttribute: true,
+            notify: true
         }
 
     },
 
     attached: function() {
-        this.set('storageReference', this.app.storage());
+        this.set('storageReference', firebase.storage().ref(this.ref));
     },
 
     _handleFile: function() {
         var self = this;
         var file = this.$$('input[type=file]').files[0];
-        var maxFileSizeInKiloBytes = this.maxFileSize * 1024;
+        var maxFileSizeInKiloBytes = this.mhttps://localhost/campagnesccraxFileSize * 1024;
+        if(!file) return;
         if(file.size > maxFileSizeInKiloBytes) return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
-        if(!this.path) return alert("Upload path not set");
-        this._uploadFile(this.path, file);
+        if(!this.ref) return alert("Upload path not set");
+        this._uploadFile(this.ref, file);
     },
 
     _uploadFile: function(path, file) {
         var self = this;
         self.set('progress', 0);
-        this.set('uploadTask', this.storageReference.ref().child(path + file.name).put(file));
+        this.set('uploadTask', this.storageReference.child(file.name).put(file));
         this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             function(snapshot) {
+
                 self.set('progress', (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 console.log('Upload is ' + self.progress + '% done');
+
                 switch (snapshot.state) {
                   case firebase.storage.TaskState.PAUSED: // or 'paused'
                     self.fire('paused', snapshot);
@@ -117,6 +120,7 @@ Upload files to firebase storage bucket
                     self.fire('running', snapshot);
                     break;
                 }
+
             }, function(error) {
                 self.fire('error', error);
             }, function(snapshot) {
