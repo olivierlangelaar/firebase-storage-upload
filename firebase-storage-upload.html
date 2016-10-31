@@ -16,10 +16,15 @@ Upload files to firebase storage bucket
       }
     </style>
 
+    <template is="dom-if" if="[[label]]">
+        <label for="[[name]]">[[label]]</label>
+    </template>
+
     <input
         type="file"
         on-change="_handleFile"
         accept="[[accept]]"
+        name="[[name]]"
         >
 
   </template>
@@ -63,6 +68,20 @@ Upload files to firebase storage bucket
           value: ''
         },
         /**
+         * Name for input element.
+         */
+        name: {
+          type: String,
+          value: 'file-upload'
+        },
+        /**
+         * Label for input element
+         */
+        label: {
+          type: String,
+          value: null
+        },
+        /**
          * Reference to storage bucket
          */
         storageReference: {
@@ -84,7 +103,8 @@ Upload files to firebase storage bucket
             value: 0,
             reflectToAttribute: true,
             notify: true
-        }
+        },
+
 
     },
 
@@ -95,7 +115,7 @@ Upload files to firebase storage bucket
     _handleFile: function() {
         var self = this;
         var file = this.$$('input[type=file]').files[0];
-        var maxFileSizeInKiloBytes = this.mhttps://localhost/campagnesccraxFileSize * 1024;
+        var maxFileSizeInKiloBytes = this.maxFileSize * 1024;
         if(!file) return;
         if(file.size > maxFileSizeInKiloBytes) return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
         if(!this.ref) return alert("Upload path not set");
