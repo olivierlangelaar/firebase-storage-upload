@@ -16,9 +16,7 @@ Upload files to firebase storage bucket
       }
     </style>
 
-    <template is="dom-if" if="[[label]]">
-        <label for="[[name]]">[[label]]</label>
-    </template>
+    <content></content>
 
     <input
         type="file"
@@ -73,13 +71,6 @@ Upload files to firebase storage bucket
         name: {
           type: String,
           value: 'file-upload'
-        },
-        /**
-         * Label for input element
-         */
-        label: {
-          type: String,
-          value: null
         },
         /**
          * Reference to storage bucket
