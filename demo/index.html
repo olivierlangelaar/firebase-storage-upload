@@ -39,9 +39,12 @@
             accept="image/jpeg,image/jpeg,image/png,application/pdf"
             max-file-size="6000"
             progress="{{progress}}">
-          </firebase-storage-upload>
 
-          <paper-progress value="[[progress]]"></paper-progress>
+            <paper-progress value="[[progress]]"></paper-progress>
+
+            <label for="upload-input">Some nice label</label>
+
+          </firebase-storage-upload>
 
         </template>
       </demo-snippet>
