@@ -8,13 +8,30 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../polymerfire/polymerfire.html">
+
     <link rel="import" href="../firebase-storage-upload.html">
+
+    <firebase-app
+      database-url="https://fir-storage-upload.firebaseio.com"
+      auth-domain="fir-storage-upload.firebaseapp.com"
+      api-key="AIzaSyDaWkiZ5QLcPQppCEt0IpGKYd3QXPByZTc"
+      storage-bucket="fir-storage-upload.appspot.com">
+    </firebase-app>
+
   </head>
   <body>
 
     <test-fixture id="basic">
-      <template>
-        <firebase-storage-upload></firebase-storage-upload>
+      <template is="dom-bind">
+
+        <firebase-storage-upload
+          ref="/tests/"
+          accept="image/jpeg,image/jpeg,image/png,application/pdf"
+          max-file-size="6000"
+          progress="{{progress}}">
+        </firebase-storage-upload>
+
       </template>
     </test-fixture>
 
