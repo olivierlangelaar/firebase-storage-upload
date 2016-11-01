@@ -23,6 +23,7 @@ Upload files to firebase storage bucket
         on-change="_handleFile"
         accept="[[accept]]"
         name="[[name]]"
+        hidden="[[hideButton]]"
         >
 
   </template>
@@ -95,8 +96,13 @@ Upload files to firebase storage bucket
             reflectToAttribute: true,
             notify: true
         },
-
-
+        /**
+         * Hide input button
+         */
+        hideButton: {
+            type: Boolean,
+            value: false
+        }
     },
 
     attached: function() {
