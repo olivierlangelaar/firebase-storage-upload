@@ -140,8 +140,8 @@ Upload files to firebase storage bucket
 
             }, function(error) {
                 self.fire('error', error);
-            }, function(snapshot) {
-                self.fire('success', snapshot);
+            }, function() {
+                self.fire('success', self.uploadTask.snapshot);
             }
         );
     }
